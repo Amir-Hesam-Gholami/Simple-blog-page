@@ -11,7 +11,7 @@ function MyNavbar() {
   return (
     <Navbar key={expand} style={{backgroundColor : '#ccc'}} expand={expand} className="mb-3">
       <Container>
-        <Navbar.Brand className="lalezar fs-4" href="#">بلاگ نکست وان کد</Navbar.Brand>
+        <Navbar.Brand className="lalezar fs-4" href="#">صفحه بلاگ</Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
         <Navbar.Offcanvas
           id={`offcanvasNavbar-expand-${expand}`}
@@ -20,7 +20,7 @@ function MyNavbar() {
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-              بلاگ نکست وان کد
+              صفحه بلاگ 
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
