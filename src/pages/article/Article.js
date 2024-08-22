@@ -1,18 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Container , Row , Col, Button } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
+import { useNavigate, useParams } from "react-router-dom";
 import MyNavbar from "../../components/navbar/MyNavbar";
-import {BsPencilSquare} from "react-icons/bs"
-import {BiTimeFive , BiCategoryAlt} from "react-icons/bi"
-import {MdDelete , MdOutlineEditCalendar} from "react-icons/md"
-import './Article.css'
-
+import { BsPencilSquare } from "react-icons/bs";
+import { BiTimeFive, BiCategoryAlt } from "react-icons/bi";
+import { MdDelete, MdOutlineEditCalendar } from "react-icons/md";
+import "./Article.css";
+import Swal from "sweetalert2";
 
 function Article() {
-  const articleId = useParams().articleId;
 
   const [articleData, setArticleData] = useState({});
+  const articleId = useParams().articleId;
+  const navigate = useNavigate()
 
   useEffect(() => {
     axios
@@ -20,39 +21,67 @@ function Article() {
       .then((response) => setArticleData(response.data));
   }, []);
 
+  const deleteArticleHandler = (id) => {
+
+    Swal.fire({
+        title: 'مطمئنی میخوای مقاله رو حذف کنی؟',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'آره حذفش کن',
+        cancelButtonText : 'نه'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title : 'مقاله با موفقیت حذف شد',
+            icon : 'success'
+          })
+          axios.delete(`http://localhost:5000/articles/${id}`)
+          navigate('/')
+        }
+      })
+
+    
+  }
+
   return (
     <>
       <MyNavbar />
       <Container>
-        <Row style={{marginTop : '70px'}}>
+        <Row style={{ marginTop: "70px" }}>
           <Col lg={4}>
             <div className="articleCardContainer">
-                <div className="cardHeader">
-                    <img src={articleData.image}/>
-                    <h4>{articleData.title}</h4>
-                </div>
-                <div className="cardBody">
-                    <p>
-                        <BsPencilSquare size='20px' />
-                        نویسنده : <b>{articleData.writter}</b>
-                    </p>
-                    <p>
-                        <BiTimeFive size='20px' />
-                        مدت زمان : <b>{articleData.readingTime}</b>
-                    </p>
-                    <p>
-                        <BiCategoryAlt size='20px' />
-                         دسته بندی : <b>{articleData.category}</b>
-                    </p>
-                </div>
-                <div className="cardFooter">
-                    <Button  variant="outline-danger"><MdDelete size='25px' /> حذف مقاله</Button>
-                    <Button variant="outline-primary"><MdOutlineEditCalendar size='25px' /> ویرایش مقاله مقاله</Button>
-                </div>
+              <div className="cardHeader">
+                <img src={articleData.image} />
+                <h4>{articleData.title}</h4>
+              </div>
+              <div className="cardBody">
+                <p>
+                  <BsPencilSquare size="20px" />
+                  نویسنده : <b>{articleData.writter}</b>
+                </p>
+                <p>
+                  <BiTimeFive size="20px" />
+                  مدت زمان : <b>{articleData.readingTime} دقیقه</b>
+                </p>
+                <p>
+                  <BiCategoryAlt size="20px" />
+                  دسته بندی : <b>{articleData.category}</b>
+                </p>
+              </div>
+              <div className="cardFooter">
+                <Button onClick={ () => deleteArticleHandler(articleId)} variant="outline-danger">
+                  <MdDelete size="25px" /> حذف مقاله
+                </Button>
+                <Button variant="outline-primary">
+                  <MdOutlineEditCalendar size="25px" /> ویرایش مقاله
+                </Button>
+              </div>
             </div>
           </Col>
 
-          <Col className="text" lg={8}>
+          <Col lg={8}>
             <p>
               لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با
               استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله
